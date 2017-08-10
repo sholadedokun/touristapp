@@ -17,7 +17,7 @@ import {
 const ROOT_URL = 'https://maps.googleapis.com/maps/api/';
 const SUB_URL_CITYNAME = `${ROOT_URL}geocode/json`
 const SUB_URL_AUTOCOMPLETE = `${ROOT_URL}place/autocomplete/json`
-const API_KEY = 'AIzaSyD4fFnQevgJHshQ8YwrAKvDjL9eF_MDJ3Q'
+const API_KEY = 'AIzaSyCvs8x7JdUhluxqW70x858O7Y5paUpIqN4'
 const google= window.google;
 let map;
 let service;
@@ -26,6 +26,7 @@ export function getLongLat(){
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition( setPosition, setPositionError);
             function setPosition(position, error){
+
                 dispatch({
                     type: FETCH_POSITION,
                     payload: {latitude:position.coords.latitude, longitude:position.coords.longitude}
@@ -50,11 +51,18 @@ export function reverseGeocoding(position){
     return function(dispatch) {
       axios.get(`${SUB_URL_CITYNAME}?key=${API_KEY}&latlng=${position.latitude},${position.longitude}`)
         .then(response => {
-
-            dispatch({
-                type: FETCH_CITYNAME,
-                payload: response
-            })
+            if(response.data && response.data.status==='OK'){
+                dispatch({
+                    type: FETCH_CITYNAME,
+                    payload: response.data.results
+                })
+            }
+            else{
+                dispatch({
+                    type: FETCH_CITYNAME_ERROR,
+                    payload: 'Error Fetching User\'s city'
+                });
+            }
         })
         .catch(() => {
           // If request is bad...
@@ -68,7 +76,7 @@ export function reverseGeocoding(position){
 }
 export function citynameAutoComplete(input){
 
-    
+
 }
 function createMapService(latitude, longitude, callback){
     try{

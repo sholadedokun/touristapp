@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { getLongLat, reverseGeocoding, citynameAutoComplete } from '../actions';
+import { getLongLat, reverseGeocoding } from '../actions';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux'
 import AutoComplete from './googleMapWrapper/autoComplete'
@@ -14,20 +14,26 @@ class Header extends(Component){
     componentWillMount(){
         this.props.getLongLat();
     }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.allRestaurants.position && !nextProps.allRestaurants.cityName && nextProps.allRestaurants.error ==='') {
+            nextProps.reverseGeocoding(nextProps.allRestaurants.position)
+        }
+    }
 
     render(){
         const { handleSubmit, allRestaurants } =this.props
-        if(allRestaurants.position && !allRestaurants.cityName && allRestaurants.error !=='') {
-            this.props.reverseGeocoding(allRestaurants.position)
-        }
+
         console.log(allRestaurants.cityName)
         return(
             <div className="App-header">
             {
                 allRestaurants.cityName ?
-                    <h2>Find a Restaurant Near <br />
-                        {}
-                    </h2>
+                    <div>
+                        <h2>Find a Restaurant Near <br />
+                            {allRestaurants.cityName[0].formatted_address}
+                        </h2>
+                        <a  onclick={()=>console.log('here')}> Not Your Location ? use the city finder </a>
+                    </div>
                 :
 
                 <div className="searchBar">
@@ -62,4 +68,4 @@ export default reduxForm({
     validate,
     form: 'searchBar'
 
-})(connect(mapStateToProps, {getLongLat, reverseGeocoding, citynameAutoComplete})(Header))
+})(connect(mapStateToProps, {getLongLat, reverseGeocoding})(Header))
