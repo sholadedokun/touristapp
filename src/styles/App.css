@@ -1,0 +1,137 @@
+@import url(font-awesome.min.css);
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,300italic,500,500italic");
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato','Raleway'; }
+
+.App {
+  text-align: center; }
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px; }
+
+a {
+  text-decoration: none;
+  font-size: 0.85em; }
+
+ul {
+  list-style: none;
+  margin: 0 auto; }
+
+li {
+  float: left;
+  margin: 0.5em; }
+
+.App-header {
+  background-color: #222;
+  height: 120px;
+  padding: 20px;
+  color: white; }
+  .App-header ul {
+    float: right; }
+
+.App-intro {
+  width: 100%;
+  font-size: large;
+  height: 200px;
+  margin: 20px auto; }
+  .App-intro button {
+    padding: 10px; }
+
+.App-body {
+  margin: 0 10% 20px; }
+  .App-body .storyContainer {
+    float: left;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #555;
+    text-align: left; }
+    .App-body .storyContainer p {
+      font-size: 0.85em; }
+
+.textError {
+  font-size: 0.85em;
+  margin: 5px auto;
+  color: #d00; }
+
+.searchBar input, .searchBar button {
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #555;
+  color: #555;
+  outline: none;
+  font-size: 0.8em; }
+
+.searchBar input {
+  border-radius: 5px;
+  width: 50%; }
+
+.searchBar button {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-left: 0px;
+  cursor: pointer; }
+
+.button {
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+  border: none;
+  background: none;
+  outline: none; }
+
+.primary {
+  background: #009;
+  color: #fff;
+  margin: 15px;
+  display: inline-block; }
+
+.buttonContainer {
+  margin-left: 20px 0; }
+
+.review {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #555;
+  padding: 10px; }
+
+.detailsDescription {
+  width: 50%;
+  border-radius: 5px;
+  border: 1px solid #555;
+  border-bottom: none;
+  float: left; }
+
+.restaurantContainer {
+  border: 1px solid #999;
+  border-radius: 5px;
+  width: 300px;
+  margin: 0 auto;
+  overflow: hidden;
+  height: auto;
+  text-align: left; }
+  .restaurantContainer div {
+    width: inherit; }
+  .restaurantContainer span {
+    display: inline-block; }
+  .restaurantContainer .restaurantDetails {
+    padding: 15px 10px;
+    font-size: 0.85em; }
+    .restaurantContainer .restaurantDetails .name {
+      font-size: 1.5em; }
+    .restaurantContainer .restaurantDetails .smallTitle {
+      font-size: 1.1em;
+      font-weight: bold; }
+    .restaurantContainer .restaurantDetails .distance {
+      font-size: 0.7em;
+      text-align: right; }
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
