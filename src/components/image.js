@@ -5,13 +5,13 @@ export default ({url, width, height, type})=>{
     let style={
         productImage:{
             background: `url(${url}) no-repeat center`,
-            width,
+            width:'auto',
             height,
             overflow: 'hidden'
         },
         profileImage:{
             background: `url(${url}) no-repeat center`,
-            width,
+            width: 'auto',
             height,
             overflow: 'hidden',
             borderRadius: '50%'

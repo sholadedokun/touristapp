@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {fetchRestaurants} from '../actions';
 import Restaurant from './restaurant.js';
+import {Grid, Row} from 'react-bootstrap';
 import _ from 'lodash';
 class Home extends (Component){
 
@@ -25,16 +26,11 @@ class Home extends (Component){
 
 
         return(
-            <div className="container">
-                <div className="App-intro">
-                     <p>
-                        <h1> Find A Restaurant Helper </h1>
-                     </p>
-                </div>
-                <ul>
-
-                {allRestaurants}</ul>
-            </div>
+            <Grid>
+                <Row componentClass="ul">
+                {allRestaurants}
+                </Row>
+            </Grid>
         )
     }
 }

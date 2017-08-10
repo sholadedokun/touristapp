@@ -4,6 +4,7 @@ import {fetchDetails} from '../actions';
 import Rating from './rating';
 import Button from './button';
 import Image from './image'
+import {Col} from 'react-bootstrap';
 class Restaurant extends(Component){
     render(){
 
@@ -12,7 +13,7 @@ class Restaurant extends(Component){
         const RestaurantType= types.splice(0, 2).toString().replace(',', ' | ').replace(/(?:^|\s)\S/g, l => l.toUpperCase());
         const profileImage= photos ? photos[0].getUrl({'maxWidth': 400}) || icon : icon
         return(
-            <li className="storyContainer">
+            <Col md={3} sm={6} xs={12} componentClass="li" col className="storyContainer">
                 <div className="restaurantContainer">
                     <div name='imageContainer' className="imageContainer">
                         <Image width='300px' height='250px' type='productImage'  url={profileImage} />
@@ -42,7 +43,7 @@ class Restaurant extends(Component){
                         <Button value="View Details" type="primary" icon='star-o' link={`restaurant/${place_id}`}/>
                     </div>
                 </div>
-            </li>
+            </Col>
         )
     }
 

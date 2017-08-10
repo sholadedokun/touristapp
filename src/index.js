@@ -11,9 +11,9 @@ import './styles/App.css';
 
 import Header from './components/header';
 import Home from './components/home';
-import RestuarantDetails from './components/restaurantDetails'
-import reducers from './reducers'
-
+import RestuarantDetails from './components/restaurantDetails';
+import reducers from './reducers';
+import {Grid, Row} from 'react-bootstrap';
 import registerServiceWorker from './registerServiceWorker';
 
 
@@ -24,11 +24,13 @@ const store = createStoreWithMiddleware(reducers);
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <div className="App">
-                <Header />
-                <Route  exact path="/"  component={Home} />
-                <Route  path="/restaurant/:id"  component={RestuarantDetails} />
-            </div>
+            <Grid fluid={true} className="App nop">
+                <Row>
+                    <Header />
+                    <Route  exact path="/"  component={Home} />
+                    <Route  path="/restaurant/:id"  component={RestuarantDetails} />
+                </Row>
+            </Grid>
         </Router>
     </Provider>,
 
