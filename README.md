@@ -3,12 +3,16 @@ This project is an assignment for the WARP Job application
 OLUSHOLA ADEDOKUN
 
 ## TABLE OF CONTENTS
-
+- Run the App-header
 - Technology
 - Testing
 - Heroku
 - CI
 
+## RUN THE App
+install nodejs
+run npm install
+run npm start
 
 ## TECHNOLOGY
 Front-end implementation: React, Redux
