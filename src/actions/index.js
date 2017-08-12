@@ -10,7 +10,8 @@ import {
   FETCH_POSITION_ERROR,
   FETCH_RESTAURANT,
   FETCH_RESTAURANT_DETAILS,
-  FETCH_RESTAURANT_ERROR
+  FETCH_RESTAURANT_ERROR,
+  FAIL_TO_CONNECT
 
 } from './actionTypes';
 
@@ -21,32 +22,50 @@ const API_KEY = 'AIzaSyCvs8x7JdUhluxqW70x858O7Y5paUpIqN4'
 const google= window.google;
 let map;
 let service;
-export function getLongLat(){
+let prevRestautants=[];
+let prevLocation=''
+export function getLongLat(fromAutoFill, fillPosition){
     return function(dispatch) {
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition( setPosition, setPositionError);
-            function setPosition(position, error){
-
+        if(!fromAutoFill){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition( setPosition, setPositionError);
+            }
+            else{
                 dispatch({
-                    type: FETCH_POSITION,
-                    payload: {latitude:position.coords.latitude, longitude:position.coords.longitude}
+                    type: FETCH_POSITION_ERROR,
+                    payload: 'Geolocation not supported'
                 })
             }
-            function setPositionError(){
+        }
+        else{
+            setPosition(fillPosition)
+        }
+        function setPosition(position, error){
+
+            dispatch({
+                type: FETCH_POSITION,
+                payload: {latitude:position.coords.latitude, longitude:position.coords.longitude}
+            })
+        }
+        function setPositionError(){
+            if(google){
                 dispatch({
                     type: FETCH_POSITION_ERROR,
                     payload: 'Unable to get your Position'
                 })
             }
+            else{
+                dispatch({
+                    type: FAIL_TO_CONNECT,
+                    payload: 'Seems Internet is down... reconnect and try again'
+                })
+            }
+
         }
-        else{
-            dispatch({
-                type: FETCH_POSITION_ERROR,
-                payload: 'Geolocation not supported'
-            })
-        }
+
     }
 }
+
 export function reverseGeocoding(position){
     return function(dispatch) {
       axios.get(`${SUB_URL_CITYNAME}?key=${API_KEY}&latlng=${position.latitude},${position.longitude}`)
@@ -92,14 +111,24 @@ function createMapService(latitude, longitude, callback){
         callback('Error connecting to the Internet... please check your connection', null)
     }
 }
+export function loadMore(allRestaurants, pagination){
+    return function(dispatch) {
+        pagination.nextPage(function(data){
+            console.log(data)
+            dispatch({
+                type: 'FETCH_MORE_RESTAURANT',
+                payload: [...allRestaurants, ...data]
+            })
 
+        })
+    }
+}
 export function fetchRestaurants(position){
 
     return function(dispatch) {
         createMapService(position.latitude, position.longitude,  function(error, response){
 
             if(error){
-                console.log(error)
                 dispatch({
                     type: FETCH_RESTAURANT_ERROR,
                     payload: 'Fetching Restaurants failed Please Check your Internet Connection'
@@ -110,19 +139,27 @@ export function fetchRestaurants(position){
                     location: response.mylocation,
                     radius: '500',
                     type: ['restaurant']
-                    // nearbySearchKeys: ['photos', 'place_id', 'name', 'geometry', etc, etc...]
                 };
-                response.service.nearbySearch(request, function(payload, status){
+                response.service.nearbySearch(request, function(payload, status, pagination){
 
                     if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        let allRestaurants=payload;
 
-                        _.forEach(payload, function(value){
-                            console.log(value);
-                        })
+                        if(_.isEqual(request.location, prevLocation)){
+                            allRestaurants = [...prevRestautants, ...payload]
+                        }
+                        prevLocation= request.location;
+                        // console.log(request.location)
+
+                        if(pagination.hasNextPage){
+                            prevRestautants=allRestaurants
+                        }
                         dispatch({
                             type: FETCH_RESTAURANT,
-                            payload: payload
+                            payload: {result:allRestaurants, pagination}
                         });
+
+
                     }
                     if(status==="ZERO_RESULTS" && payload.length===0){
                         dispatch({
@@ -155,6 +192,24 @@ export function fetchDetails(position, restaurantId) {
                     }
                 });
             }
+        })
+    }
+}
+
+export function switcher(){
+    return function(dispatch){
+        prevRestautants =[]
+        dispatch({
+            type: FETCH_CITYNAME_ERROR,
+            payload: 'Unable to find City'
+        })
+    }
+}
+export function failedToConnect(){
+    return function(dispatch){
+        dispatch({
+            type: FAIL_TO_CONNECT,
+            payload: 'Seems Internet is down... reconnect and try again'
         })
     }
 }

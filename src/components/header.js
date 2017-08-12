@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { getLongLat, reverseGeocoding } from '../actions';
-import { Field, reduxForm } from 'redux-form';
+import { getLongLat, reverseGeocoding, switcher} from '../actions';
 import { connect } from 'react-redux'
 import AutoComplete from './googleMapWrapper/autoComplete'
 
@@ -8,22 +7,30 @@ import AutoComplete from './googleMapWrapper/autoComplete'
 class Header extends(Component){
     constructor(props){
         super();
-        // this.renderInput= this.renderInput.bind(this);
-        // this.autocomplete= this.autocomplete.bind(this);
+        this.switchToAutofill=this.switchToAutofill.bind(this);
     }
     componentWillMount(){
+        //when our application is about to mount we want to run this action to get current longitude and latidude
+        //from the user's device
         this.props.getLongLat();
     }
     componentWillReceiveProps(nextProps){
+        //whenever our component wants to receive another property
+        //if we have a position(long and lang) and we haven't resolve the cityName and we don't have any errors
         if(nextProps.allRestaurants.position && !nextProps.allRestaurants.cityName && nextProps.allRestaurants.error ==='') {
+            //then we want to resolve our Geocode / postion coordinate to a city name
             nextProps.reverseGeocoding(nextProps.allRestaurants.position)
         }
     }
+    //if we want to manually switch to autofill
+    switchToAutofill(event){
+
+        event.preventDefault()
+        this.props.switcher()
+    }
 
     render(){
-        const { handleSubmit, allRestaurants } =this.props
-
-        console.log(allRestaurants.cityName)
+        const { allRestaurants } = this.props
         return(
             <div className="App-header">
             {
@@ -32,10 +39,9 @@ class Header extends(Component){
                         <h2>Find a Restaurant Near <br />
                             {allRestaurants.cityName[0].formatted_address}
                         </h2>
-                        <a  onclick={()=>console.log('here')}> Not Your Location ? use the city finder </a>
+                        <a href="#" onClick={this.switchToAutofill}> Not Your Location ? use the city finder </a>
                     </div>
                 :
-
                 <div className="searchBar">
                     <h2>Sorry we could not locate you automatically, please use the form below</h2>
                     <form>
@@ -47,25 +53,11 @@ class Header extends(Component){
         )
     }
 }
-function validate(values){
-    const errors={}
-    if(!values.searchBar){
-        errors.searchBar = 'Please Type a search term';
-    }
-    if(values.length < 3 ){
-        errors.SearchBar = 'Search term must be atleast 3 characters';
-    }
-
-    return errors
-
-}
+//to connet to our this component's prop to our state
 function mapStateToProps(state){
     return{
         allRestaurants:state.allRestaurants
     }
 }
-export default reduxForm({
-    validate,
-    form: 'searchBar'
-
-})(connect(mapStateToProps, {getLongLat, reverseGeocoding})(Header))
+//wrapping our connect with the component
+export default connect(mapStateToProps, {getLongLat, reverseGeocoding, switcher})(Header)

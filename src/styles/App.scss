@@ -61,6 +61,7 @@ li{
         p {
             font-size: 0.85em
         }
+        min-height: 400px;
     }
 }
 .textError{
@@ -108,15 +109,35 @@ li{
 .review{
     width: 100%;
     height:auto;
-    border-bottom: 1px solid #555;
     padding: 10px
+
+}
+.restaurantHead{
+    margin: 1.5em 0em;
+    text-align: left;
+    font-weight: bold;
+    div:last-child{
+        text-align: right;
+    }
+}
+.reviewDivider{
+    border-bottom: 1px solid #555;
+    padding: 1em 0;
 }
 .detailsDescription{
-    width: 50%;
     border-radius: 5px;
     border: 1px solid #555;
     border-bottom: none;
     float: left;
+}
+.detailViewList{
+    text-align: left;
+    border-bottom: 1px solid #555;
+    padding: 0.6em 1.5em;
+}
+.detailLabel{
+    font-weight: bold;
+    margin: 0 1em 0 0.5em;
 }
 .restaurantContainer{
     border: 1px solid #999;
@@ -140,6 +161,9 @@ li{
         .smallTitle{   font-size: 1.1em; font-weight: bold }
         .distance{   font-size: 0.7em; text-align: right;    }
     }
+}
+.restaurantDetailsContainer{
+    margin: 4em auto;
 }
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
